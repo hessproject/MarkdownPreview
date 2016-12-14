@@ -1,0 +1,53 @@
+marked.setOptions({
+	breaks:true,
+	sanitize:true,
+})
+
+class TextEntry extends React.Component{
+	render() {
+		return(
+			<div className="col-md-6 well" id="textEntry">
+				<textarea rows="6" onChange={this.props.onTextChange}></textarea>
+			</div>
+		)
+	}
+}
+
+const MarkdownPreview = ({text}) => {
+		let markdown = {__html: marked(text)}
+		return(
+			<div className="col-md-6 well" id="markdown">
+				<div dangerouslySetInnerHTML={markdown} /> 
+			</div>
+		) //dangerouslySetInnerHTML can open your site to XSS, thus the wording + extra required __html step
+}
+
+class App extends React.Component{
+	
+	constructor(props){
+		super(props);
+		
+		this.state= {
+			text: '',
+		};
+		
+		this.onTextChange = this.onTextChange.bind(this);
+	}
+	
+	onTextChange(e){
+		const text = e.target.value;
+		this.setState({text: text});
+	}
+
+	render(){
+		return(
+			<div id="innerContainer">
+				<h1>Markdown Preview</h1>
+				<TextEntry onTextChange={this.onTextChange} />
+				<MarkdownPreview text={this.state.text} />
+			</div>
+		)
+	}
+}
+
+ReactDOM.render(<App/>, document.getElementById("app") );
