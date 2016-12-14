@@ -1,11 +1,11 @@
 marked.setOptions({
-	breaks:true,
-	sanitize:true,
+	breaks: true,
+	sanitize: true,
 })
 
-class TextEntry extends React.Component{
+class TextEntry extends React.Component {
 	render() {
-		return(
+		return (
 			<div className="col-md-6 well" id="textEntry">
 				<textarea rows="6" onChange={this.props.onTextChange}></textarea>
 			</div>
@@ -13,41 +13,48 @@ class TextEntry extends React.Component{
 	}
 }
 
-const MarkdownPreview = ({text}) => {
-		let markdown = {__html: marked(text)}
-		return(
+const MarkdownPreview = ({
+	markdown
+}) => {
+	return (
 			<div className="col-md-6 well" id="markdown">
 				<div dangerouslySetInnerHTML={markdown} /> 
 			</div>
 		) //dangerouslySetInnerHTML can open your site to XSS, thus the wording + extra required __html step
 }
 
-class App extends React.Component{
-	
-	constructor(props){
+class App extends React.Component {
+
+	constructor(props) {
 		super(props);
-		
-		this.state= {
+
+		this.state = {
 			text: '',
 		};
-		
+
 		this.onTextChange = this.onTextChange.bind(this);
 	}
-	
-	onTextChange(e){
+
+	onTextChange(e) {
 		const text = e.target.value;
-		this.setState({text: text});
+		this.setState({
+			text: text
+		});
 	}
 
-	render(){
-		return(
+	render() {
+		let text = this.state.text;
+		let markdown = {
+			__html: marked(text)
+		}				
+		return (
 			<div id="innerContainer">
 				<h1>Markdown Preview</h1>
 				<TextEntry onTextChange={this.onTextChange} />
-				<MarkdownPreview text={this.state.text} />
+				<MarkdownPreview markdown={markdown} />
 			</div>
 		)
 	}
 }
 
-ReactDOM.render(<App/>, document.getElementById("app") );
+ReactDOM.render(<App/>, document.getElementById("app"));
