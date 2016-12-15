@@ -1,27 +1,40 @@
 marked.setOptions({
 	breaks: true,
-	sanitize: true,
-})
+	sanitize: true
+});
+
+
+const Header = () => {
+	return (
+		<div className="header" text-align="center">
+			<h1>Markdown Preview</h1>
+			<h4>Markdown syntax cheatsheet can be found <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">here</a></h4>
+		</div>
+	)	
+}
+
+
+const MarkdownPreview = ({
+	markdown
+}) => {
+	return (
+			<div className="col-md-6 well markdown">
+				<div dangerouslySetInnerHTML={markdown} /> 
+			</div>
+		) //dangerouslySetInnerHTML can open your site to XSS, thus the wording + extra required __html step
+}
+
 
 class TextEntry extends React.Component {
 	render() {
 		return (
-			<div className="col-md-6 well" id="textEntry">
+			<div className="col-md-6 well textEntry">
 				<textarea rows="6" onChange={this.props.onTextChange}></textarea>
 			</div>
 		)
 	}
 }
 
-const MarkdownPreview = ({
-	markdown
-}) => {
-	return (
-			<div className="col-md-6 well" id="markdown">
-				<div dangerouslySetInnerHTML={markdown} /> 
-			</div>
-		) //dangerouslySetInnerHTML can open your site to XSS, thus the wording + extra required __html step
-}
 
 class App extends React.Component {
 
@@ -49,7 +62,7 @@ class App extends React.Component {
 		}				
 		return (
 			<div id="innerContainer">
-				<h1>Markdown Preview</h1>
+				<Header />
 				<TextEntry onTextChange={this.onTextChange} />
 				<MarkdownPreview markdown={markdown} />
 			</div>

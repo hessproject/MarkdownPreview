@@ -11,6 +11,38 @@ marked.setOptions({
 	sanitize: true
 });
 
+var Header = function Header() {
+	return React.createElement(
+		"div",
+		{ className: "header", "text-align": "center" },
+		React.createElement(
+			"h1",
+			null,
+			"Markdown Preview"
+		),
+		React.createElement(
+			"h4",
+			null,
+			"Markdown syntax cheatsheet can be found ",
+			React.createElement(
+				"a",
+				{ href: "https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet", target: "_blank" },
+				"here"
+			)
+		)
+	);
+};
+
+var MarkdownPreview = function MarkdownPreview(_ref) {
+	var markdown = _ref.markdown;
+
+	return React.createElement(
+		"div",
+		{ className: "col-md-6 well markdown" },
+		React.createElement("div", { dangerouslySetInnerHTML: markdown })
+	); //dangerouslySetInnerHTML can open your site to XSS, thus the wording + extra required __html step
+};
+
 var TextEntry = function (_React$Component) {
 	_inherits(TextEntry, _React$Component);
 
@@ -23,24 +55,13 @@ var TextEntry = function (_React$Component) {
 	TextEntry.prototype.render = function render() {
 		return React.createElement(
 			"div",
-			{ className: "col-md-6 well", id: "textEntry" },
+			{ className: "col-md-6 well textEntry" },
 			React.createElement("textarea", { rows: "6", onChange: this.props.onTextChange })
 		);
 	};
 
 	return TextEntry;
 }(React.Component);
-
-var MarkdownPreview = function MarkdownPreview(_ref) {
-	var text = _ref.text;
-
-	var markdown = { __html: marked(text) };
-	return React.createElement(
-		"div",
-		{ className: "col-md-6 well", id: "markdown" },
-		React.createElement("div", { dangerouslySetInnerHTML: markdown })
-	); //dangerouslySetInnerHTML can open your site to XSS, thus the wording + extra required __html step
-};
 
 var App = function (_React$Component2) {
 	_inherits(App, _React$Component2);
@@ -60,20 +81,22 @@ var App = function (_React$Component2) {
 
 	App.prototype.onTextChange = function onTextChange(e) {
 		var text = e.target.value;
-		this.setState({ text: text });
+		this.setState({
+			text: text
+		});
 	};
 
 	App.prototype.render = function render() {
+		var text = this.state.text;
+		var markdown = {
+			__html: marked(text)
+		};
 		return React.createElement(
 			"div",
 			{ id: "innerContainer" },
-			React.createElement(
-				"h1",
-				null,
-				"Markdown Preview"
-			),
+			React.createElement(Header, null),
 			React.createElement(TextEntry, { onTextChange: this.onTextChange }),
-			React.createElement(MarkdownPreview, { text: this.state.text })
+			React.createElement(MarkdownPreview, { markdown: markdown })
 		);
 	};
 
